@@ -2,8 +2,10 @@
 
 ## How to use
 ### Prerequisites
+```
 node.js     v13.10.1
 npm         6.13.7
+```
 
 ### Install
 Git all the files to your machine, use ``npm install`` to download all the required modules on the root folder.
