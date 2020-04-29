@@ -1,0 +1,11 @@
+@media (min-height: 320px) {
+    .ui.footer.form-page { /* Increased specificity for SO snippet priority */
+      /* position: absolute; */
+      bottom: 0;
+      width: 100%;
+    }
+}
+
+p.addr {
+    word-break: break-all;
+}

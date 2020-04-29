@@ -1,0 +1,83 @@
+<html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/4.1.0/stellar-sdk.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/JustMaier/6ef7788709d675bd8230/raw/3d39d50e66d8d77e05656ed7dd09298be7e86f1f/ngClickCopy.js"></script>
+
+        <!-- Include the Semantic CSS UI -->
+        <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+        <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+        <script src="semantic/semantic.min.js"></script>
+        <script src="script.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </header>
+    <body>
+        <div ng-app="myApp" ng-controller="myCtrl">
+            <br>
+            <div class="ui container segments">
+                <div class="ui segment">
+                    <h2 class="ui header">
+                        <img class="ui avatar huge image" src="./ShareWonLogo.png">
+                        <span>Your ShareWon Wallet</span>
+                    </h2>
+                </div>
+                <div class="ui segment">
+                    <h3 class="ui header">Account Address: </h3>
+                    <div class="ui">
+                        <p class="addr">{{selectedAccount.Address}}</p>
+                        <button class="ui button mini" ng-click="showCopy()" ng-click-copy="{{selectedAccount.Address}}">Copy</button><span ng-show="copied">&nbsp;&nbsp;Address Copied</span>
+                    </div>
+                    <br>
+                </div>
+                <div class="ui segment">
+                    <h3 class="ui header">Account Balance: </h3>
+                    <table class="ui">
+                        <tr ng-repeat="x in account.balances">
+                            <td>
+                                <!-- <p ng-if="x.asset_type == 'native'">XLM balance:</p> -->
+                                <p ng-if="x.asset_type != 'native'">{{x.asset_code}} balance:</p>
+                            </td>
+                            <td>
+                                <p ng-if="x.asset_type != 'native'">{{x.balance}}</p>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="ui fluid buttons">
+                        <button class="ui large button" ng-model="showSend" ng-click="showSend=!showSend;showQR=false">Send</button>
+                        <button class="ui large black button" ng-model="showQR" ng-click="showQR=!showQR;showSend=false">Receive</button>
+                    </div>
+                    <br><br>
+                    <div style="text-align: center;">
+                        <div class="ui" ng-show="showQR">
+                            <h3 class="ui header">Your wallet address:</h3>
+                            <img class="ui" ng-src="https://chart.googleapis.com/chart?cht=qr&chs=256x256&chl={{selectedAccount.Address}}"/>
+                        </div>
+                        <div ng-show="showSend">
+                            <h3 class="ui header">Receiver address:</h3>
+                            <div class="ui fluid input"><input type="text" ng-model="receiverAddress" placeholder="Receiver Address"/></div>
+                            <h3 class="ui header">Amount to send:</h3>
+                            <div class="ui fluid input"><input type="text" ng-model="sendAmount" placeholder="Amount"/></div>
+                            <br>
+                            <button class="ui fluid black button" ng-click="sendShareWon(receiverAddress, sendAmount)">Send ShareWon</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="ui segment" style="text-align: center;">
+                    <button class="ui button" ng-click="checkTrust()">Check Trust</button>
+                    <button class="ui black button" ng-click="changeTrust()">Change Trust</button>
+                </div> -->
+            </div>
+        </div>
+    </body>
+    <footer>
+        <div class="ui vertical footer segment form-page">
+            <p style="text-align: center; color: grey;">Powered by Wealthskey</p>
+        </div>
+    </footer>
+</html>

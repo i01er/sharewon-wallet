@@ -1,0 +1,70 @@
+<html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/4.1.0/stellar-sdk.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/JustMaier/6ef7788709d675bd8230/raw/3d39d50e66d8d77e05656ed7dd09298be7e86f1f/ngClickCopy.js"></script>
+
+
+        <!-- Include the Semantic CSS UI -->
+        <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+        <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+        <script src="semantic/semantic.min.js"></script>
+        <!-- <script src="script.js"></script> -->
+        <script src="create.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </header>
+    <body>
+        <div ng-app="myApp" ng-controller="myCtrl">
+            <br>
+            <div class="ui container segments">
+                <div class="ui segment">
+                    <h2 class="ui header">
+                        <img class="ui avatar huge image" src="./ShareWonLogo.png">
+                        <span>Sharewon Wallet</span>
+                    </h2>
+                </div>
+                <div class="ui segment" ng-show="showLoading">
+                    <div class="ui icon message">
+                        <i class="notched circle loading icon"></i>
+                        <div class="content">
+                          <div class="header">
+                            Just one second
+                          </div>
+                          <p>We are creating the wallet for you.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui segment" ng-show="showWalletInfo">
+                    <h2 class="ui header">Wallet Successfully Created!</h2>
+                    <h3 class="ui header">Your wallet information: </h3>
+                    <p>Wallet Address:</p>
+                    <p class="addr">{{keypair.publicKey()}}</p>
+                    <p>Wallet Secret:</p>
+                    <p class="addr">{{keypair.secret()}}</p>
+                    <div class="ui negative message">
+                        <div class="header">
+                          Keep your wallet secret SAFE!
+                        </div>
+                        <p style="text-align:justify">If you ever change browsers or move computers, you will need this seed phrase to access your accounts. Save them somewhere safe and secret.</p>
+                        <p style="text-align:justify">DO NOT share this phrase with anyone!! These words can be used to steal all your accounts.</p>
+                    </div>
+                </div>
+                <div class="ui segment">
+                    <button class="ui fluid black button" ng-show="!showWalletbtn" ng-click="createAccount();showLoading=true">Create</button>
+                    <br>
+                    <button class="ui fluid black button" ng-show="showWalletbtn" ng-click="gotoMyWallet()">My Wallet</button>
+                </div>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <div class="ui vertical footer segment form-page">
+            <p style="text-align: center; color: grey;">Powered by Wealthskey</p>
+        </div>
+    </footer>
+</html>
