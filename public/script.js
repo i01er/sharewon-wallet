@@ -1,158 +1,168 @@
 var app = angular.module('myApp', ['ngClickCopy']);
-app.controller('myCtrl', function($scope, $http, $location) {
-    var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+app.controller('myCtrl', function ($scope, $http, $location) {
+  var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
 
-    // Initial the account object
-    $scope.account = {};
-    $scope.selectedAccount = {};
-    
-    // Define the view elements
-    $scope.showWalletInfo = false;
-    $scope.showLoading = false;
-    $scope.showWalletbtn = false;
-    
-    // Define the ShareTest information
-    $scope.sharewon = new StellarSdk.Asset("ShareTest", "GAILUMSBNA4NS64HHY7YWRATDDYPCKXXBWV56ZKDNDIHLBBU2FFFGUZL");
+  // Initial the account object
+  $scope.account = {};
+  $scope.selectedAccount = {};
 
-    // Bind the selected account with current account
-    $scope.bind = function() {
-      if(localStorage.getItem("WalletSecret")) {
-        var keypair = StellarSdk.Keypair.fromSecret(localStorage.getItem("WalletSecret"));
-        $scope.selectedAccount.Address = keypair.publicKey();
-        $scope.update(keypair);
-      }
-    }
+  // Define the view elements
+  $scope.showWalletInfo = false;
+  $scope.showLoading = false;
+  $scope.showWalletbtn = false;
+  $scope.showSuccess = false;
 
-    // Update the account information from blockchain ledger, especially the balance
-    $scope.update = function(account) {
-      if(account.publicKey()) {
-        $http.get("https://horizon-testnet.stellar.org/accounts/" + account.publicKey())
-        .then(function(response) {
-            $scope.account = response.data;
-            console.log($scope.account);
-            return true;
-        });
-      }
-    }
+  // Define the ShareTest information
+  $scope.sharewon = new StellarSdk.Asset("ShareTest", "GCGL3JX5UBHPGZHYRBWKB7G4LKSCCCPD34DGLK7MG2EZPBYUJLBB3TZ2");
 
-    // Function for sending XLM
-    $scope.send = async function() {
-      var sequence = $scope.account.sequence;
-      var keypair = StellarSdk.Keypair.fromSecret($scope.selectedAccount.SecretKey);
-    
-      var source = new StellarSdk.Account(keypair.publicKey(), sequence);
-      var transaction = new StellarSdk.TransactionBuilder(source, {
-          fee: StellarSdk.BASE_FEE,
-          networkPassphrase: StellarSdk.Networks.TESTNET
-        })
-        .addOperation(StellarSdk.Operation.payment({
-            destination: 'GAILUMSBNA4NS64HHY7YWRATDDYPCKXXBWV56ZKDNDIHLBBU2FFFGUZL',
-            asset: StellarSdk.Asset.native(),
-            amount: "350"
-        }))
-        .setTimeout(30)
-        .build();
-    
-      transaction.sign(keypair);
-      console.log(transaction.toEnvelope().toXDR('base64'));
+  function Decodeuint8arr(uint8array) {
+    return new TextDecoder("utf-8").decode(uint8array);
+  }
 
-      try {
-        const transactionResult = await server.submitTransaction(transaction);
-        console.log(JSON.stringify(transactionResult, null, 2));
-        console.log('\nSuccess! View the transaction at: ');
-        console.log(transactionResult._links.transaction.href);
-        $scope.update();
-      } catch (e) {
-        console.log('An error has occured:');
-        console.log(e);
-        $scope.update();
-      }
-    }
+  function Encodeuint8arr(myString) {
+    return new TextEncoder("utf-8").encode(myString);
+  }
 
-    // Function for sending ShareTest
-    $scope.sendShareWon = async function(sendAddress, sendAmount) {
-      var sequence = $scope.account.sequence;
+  // Bind the selected account with current account
+  $scope.bind = function () {
+    if (localStorage.getItem("WalletSecret")) {
       var keypair = StellarSdk.Keypair.fromSecret(localStorage.getItem("WalletSecret"));
-    
-      var source = new StellarSdk.Account(keypair.publicKey(), sequence);
-      var transaction = new StellarSdk.TransactionBuilder(source, {
-          fee: StellarSdk.BASE_FEE,
-          networkPassphrase: StellarSdk.Networks.TESTNET
-        })
-        .addOperation(StellarSdk.Operation.payment({
-            destination: sendAddress,
-            asset: $scope.sharewon,
-            amount: sendAmount
-        }))
-        .setTimeout(30)
-        .build();
-    
-      transaction.sign(keypair);
-      console.log(transaction.toEnvelope().toXDR('base64'));
-
-      try {
-        const transactionResult = await server.submitTransaction(transaction);
-        console.log(JSON.stringify(transactionResult, null, 2));
-        console.log('\nSuccess! View the transaction at: ');
-        console.log(transactionResult._links.transaction.href);
-        $scope.bind($scope.selectedAccount);
-      } catch (e) {
-        console.log('An error has occured:');
-        console.log(e);
-        $scope.bind($scope.selectedAccount);
-      }
+      $scope.selectedAccount.Address = keypair.publicKey();
+      $scope.update(keypair);
     }
+  }
 
-    $scope.airdrop = async function(sendAddress, sendAmount) {
-      var sequence = $scope.account.sequence;
-      var keypair = StellarSdk.Keypair.fromSecret($scope.selectedAccount.SecretKey);
-    
-      var source = new StellarSdk.Account(keypair.publicKey(), sequence);
-      var transaction = new StellarSdk.TransactionBuilder(source, {
-          fee: StellarSdk.BASE_FEE,
-          networkPassphrase: StellarSdk.Networks.TESTNET
-        })
-        .addOperation(StellarSdk.Operation.payment({
-            destination: sendAddress,
-            asset: $scope.sharewon,
-            amount: sendAmount
-        }))
-        .setTimeout(30)
-        .build();
-    
-      transaction.sign(keypair);
-      console.log(transaction.toEnvelope().toXDR('base64'));
-
-      try {
-        const transactionResult = await server.submitTransaction(transaction);
-        console.log(JSON.stringify(transactionResult, null, 2));
-        console.log('\nSuccess! View the transaction at: ');
-        console.log(transactionResult._links.transaction.href);
-        $scope.bind($scope.selectedAccount);
-      } catch (e) {
-        console.log('An error has occured:');
-        console.log(e);
-        $scope.bind($scope.selectedAccount);
-      }
-    }
-
-    // Check if the account trusted ShareTest
-    $scope.checkTrust = function() {
-      server.loadAccount($scope.selectedAccount.PublicKey).then(function(account) {
-        var trusted = account.balances.some(function(balance) {
-          return balance.asset_code === $scope.sharewonCode &&
-                 balance.asset_issuer === $scope.sharewonIssuer;
+  // Update the account information from blockchain ledger, especially the balance
+  $scope.update = function (account) {
+    if (account.publicKey()) {
+      $http.get("https://horizon-testnet.stellar.org/accounts/" + account.publicKey())
+        .then(function (response) {
+          $scope.account = response.data;
+          console.log($scope.account);
+          return true;
         });
-      
-        console.log(trusted ? 'Trusted :)' : 'Not trusted :(');
-      });
     }
+  }
 
-    // Change the account to trust ShareTest
-    $scope.changeTrust = function(changeAccount) {
-      console.log("calling changeTrust()...");
-      var keypair = StellarSdk.Keypair.fromSecret(changeAccount.secret());
-      server.accounts()
+  // Function for sending XLM
+  $scope.send = async function () {
+    var sequence = $scope.account.sequence;
+    var keypair = StellarSdk.Keypair.fromSecret($scope.selectedAccount.SecretKey);
+
+    var source = new StellarSdk.Account(keypair.publicKey(), sequence);
+    var transaction = new StellarSdk.TransactionBuilder(source, {
+      fee: StellarSdk.BASE_FEE,
+      networkPassphrase: StellarSdk.Networks.TESTNET
+    })
+      .addOperation(StellarSdk.Operation.payment({
+        destination: 'GAILUMSBNA4NS64HHY7YWRATDDYPCKXXBWV56ZKDNDIHLBBU2FFFGUZL',
+        asset: StellarSdk.Asset.native(),
+        amount: "350"
+      }))
+      .setTimeout(30)
+      .build();
+
+    transaction.sign(keypair);
+    console.log(transaction.toEnvelope().toXDR('base64'));
+
+    try {
+      const transactionResult = await server.submitTransaction(transaction);
+      console.log(JSON.stringify(transactionResult, null, 2));
+      console.log('\nSuccess! View the transaction at: ');
+      console.log(transactionResult._links.transaction.href);
+      $scope.update();
+    } catch (e) {
+      console.log('An error has occured:');
+      console.log(e);
+      $scope.update();
+    }
+  }
+
+  // Function for sending ShareTest
+  $scope.sendShareWon = async function (sendAddress, sendAmount) {
+    var sequence = $scope.account.sequence;
+    var keypair = StellarSdk.Keypair.fromSecret(localStorage.getItem("WalletSecret"));
+
+    var source = new StellarSdk.Account(keypair.publicKey(), sequence);
+    var transaction = new StellarSdk.TransactionBuilder(source, {
+      fee: StellarSdk.BASE_FEE,
+      networkPassphrase: StellarSdk.Networks.TESTNET
+    })
+      .addOperation(StellarSdk.Operation.payment({
+        destination: sendAddress,
+        asset: $scope.sharewon,
+        amount: sendAmount
+      }))
+      .setTimeout(30)
+      .build();
+
+    transaction.sign(keypair);
+    console.log(transaction.toEnvelope().toXDR('base64'));
+
+    try {
+      const transactionResult = await server.submitTransaction(transaction);
+      console.log(JSON.stringify(transactionResult, null, 2));
+      console.log('\nSuccess! View the transaction at: ');
+      console.log(transactionResult._links.transaction.href);
+      $scope.showSuccess = true;
+      $scope.bind($scope.selectedAccount);
+    } catch (e) {
+      console.log('An error has occured:');
+      console.log(e);
+      $scope.bind($scope.selectedAccount);
+    }
+  }
+
+  $scope.airdrop = async function (sendAddress, sendAmount) {
+    var sequence = $scope.account.sequence;
+    var keypair = StellarSdk.Keypair.fromSecret($scope.selectedAccount.SecretKey);
+
+    var source = new StellarSdk.Account(keypair.publicKey(), sequence);
+    var transaction = new StellarSdk.TransactionBuilder(source, {
+      fee: StellarSdk.BASE_FEE,
+      networkPassphrase: StellarSdk.Networks.TESTNET
+    })
+      .addOperation(StellarSdk.Operation.payment({
+        destination: sendAddress,
+        asset: $scope.sharewon,
+        amount: sendAmount
+      }))
+      .setTimeout(30)
+      .build();
+
+    transaction.sign(keypair);
+    console.log(transaction.toEnvelope().toXDR('base64'));
+
+    try {
+      const transactionResult = await server.submitTransaction(transaction);
+      console.log(JSON.stringify(transactionResult, null, 2));
+      console.log('\nSuccess! View the transaction at: ');
+      console.log(transactionResult._links.transaction.href);
+      $scope.bind($scope.selectedAccount);
+    } catch (e) {
+      console.log('An error has occured:');
+      console.log(e);
+      $scope.bind($scope.selectedAccount);
+    }
+  }
+
+  // Check if the account trusted ShareTest
+  $scope.checkTrust = function () {
+    server.loadAccount($scope.selectedAccount.PublicKey).then(function (account) {
+      var trusted = account.balances.some(function (balance) {
+        return balance.asset_code === $scope.sharewonCode &&
+          balance.asset_issuer === $scope.sharewonIssuer;
+      });
+
+      console.log(trusted ? 'Trusted :)' : 'Not trusted :(');
+    });
+  }
+
+  // Change the account to trust ShareTest
+  $scope.changeTrust = function (changeAccount) {
+    console.log("calling changeTrust()...");
+    var keypair = StellarSdk.Keypair.fromSecret(changeAccount.secret());
+    server.accounts()
       .accountId(changeAccount.publicKey())
       .call()
       .then(async ({ sequence }) => {
@@ -161,13 +171,13 @@ app.controller('myCtrl', function($scope, $http, $location) {
           fee: StellarSdk.BASE_FEE,
           networkPassphrase: StellarSdk.Networks.TESTNET
         })
-        .addOperation(StellarSdk.Operation.changeTrust({
+          .addOperation(StellarSdk.Operation.changeTrust({
             asset: $scope.sharewon,
             source: changeAccount.publicKey()
-        }))
-        .setTimeout(30)
-        .build();
-    
+          }))
+          .setTimeout(30)
+          .build();
+
         transaction.sign(keypair);
         // console.log(transaction.toEnvelope().toXDR('base64'));
 
@@ -183,58 +193,82 @@ app.controller('myCtrl', function($scope, $http, $location) {
           console.log(e);
         }
       })
-    }
+  }
 
-    // Create new wallet account
-    $scope.createAccount = function() {
-      var sourceAccount = StellarSdk.Keypair.fromSecret('SB42ERIDWT5MEFDNPH4YXMENCLCCTIYNXXSOTCTEZ3S4ELFW5GU7QT4D')
-      $scope.createdAccount = StellarSdk.Keypair.random()
+  // Create new wallet account
+  $scope.createAccount = function () {
+    var sourceAccount = StellarSdk.Keypair.fromSecret('SB42ERIDWT5MEFDNPH4YXMENCLCCTIYNXXSOTCTEZ3S4ELFW5GU7QT4D')
+    $scope.createdAccount = StellarSdk.Keypair.random()
 
-      server.accounts()
-        .accountId(sourceAccount.publicKey())
-        .call()
-        .then(({ sequence }) => {
-          const account = new StellarSdk.Account(sourceAccount.publicKey(), sequence)
-          const transaction = new StellarSdk.TransactionBuilder(account, {
-            fee: StellarSdk.BASE_FEE,
-            networkPassphrase: StellarSdk.Networks.TESTNET
-          })
-            .addOperation(StellarSdk.Operation.createAccount({
-              destination: $scope.createdAccount.publicKey(),
-              startingBalance: '25'
-            }))
-            .setTimeout(30)
-            .build()
-          transaction.sign(StellarSdk.Keypair.fromSecret(sourceAccount.secret()))
-          return server.submitTransaction(transaction)
+    server.accounts()
+      .accountId(sourceAccount.publicKey())
+      .call()
+      .then(({ sequence }) => {
+        const account = new StellarSdk.Account(sourceAccount.publicKey(), sequence)
+        const transaction = new StellarSdk.TransactionBuilder(account, {
+          fee: StellarSdk.BASE_FEE,
+          networkPassphrase: StellarSdk.Networks.TESTNET
         })
-        .then(async ({results}) => {
-          // console.log('Transaction', results._links.transaction.href)
-          // console.log('New Keypair', $scope.createdAccount.publicKey(), $scope.createdAccount.secret())
-          $scope.showWalletInfo = true;
-          $scope.showLoading = false;
-          $scope.$apply();
-          localStorage.setItem("WalletAddress", $scope.createdAccount.publicKey());
-          localStorage.setItem("WalletSecret", $scope.createdAccount.secret());
-          await $scope.changeTrust($scope.createdAccount);
-          await $scope.airdrop(sourceAccount);
-        })
-    }
-
-    // Goto wallet page after creation
-    $scope.gotoMyWallet = function() {
-      location.replace("wallet.html")
-    }
-
-    $scope.showCopy = function() {
-      $scope.copied = true;
-      setTimeout(function(){
-        $scope.copied = false;
+          .addOperation(StellarSdk.Operation.createAccount({
+            destination: $scope.createdAccount.publicKey(),
+            startingBalance: '25'
+          }))
+          .setTimeout(30)
+          .build()
+        transaction.sign(StellarSdk.Keypair.fromSecret(sourceAccount.secret()))
+        return server.submitTransaction(transaction)
+      })
+      .then(async ({ results }) => {
+        // console.log('Transaction', results._links.transaction.href)
+        // console.log('New Keypair', $scope.createdAccount.publicKey(), $scope.createdAccount.secret())
+        $scope.showWalletInfo = true;
+        $scope.showLoading = false;
         $scope.$apply();
-      },3000);
-    }
+        localStorage.setItem("WalletAddress", $scope.createdAccount.publicKey());
+        localStorage.setItem("WalletSecret", $scope.createdAccount.secret());
+        await $scope.changeTrust($scope.createdAccount);
+        await $scope.airdrop(sourceAccount);
+      })
+  }
 
-    $scope.bind();
-    // $scope.update();
-    // console.log($scope.sharewon);
+  $scope.transactionHist = function () {
+    const server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+    const accountId = 'GBZIR5RJE4WZUKI4YALXG2W6RVBTLZV5IIEX3PJHLLTMDRJ75UMJQIYG';
+
+    server.transactions()
+      .forAccount(accountId)
+      .call()
+      .then(function (page) {
+        console.log('Page 1: ');
+        console.log(page.records);
+        $scope.XDRData = StellarSdk.xdr.TransactionEnvelope.fromXDR(page.records[3].envelope_xdr, 'base64');
+        console.log(Decodeuint8arr($scope.XDRData._value._attributes.tx._attributes.operations[3]._attributes.body._value._attributes.asset._value._attributes.assetCode));
+        console.log($scope.XDRData);
+        return page.next();
+      })
+      .then(function (page) {
+        console.log('Page 2: ');
+        console.log(page.records);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
+
+  // Goto wallet page after creation
+  $scope.gotoMyWallet = function () {
+    location.replace("wallet.html")
+  }
+
+  $scope.showCopy = function () {
+    $scope.copied = true;
+    setTimeout(function () {
+      $scope.copied = false;
+      $scope.$apply();
+    }, 3000);
+  }
+
+  $scope.bind();
+  // $scope.update();
+  // console.log($scope.sharewon);
 });

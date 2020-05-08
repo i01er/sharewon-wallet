@@ -5,12 +5,13 @@ var app = angular.module('myApp', ['ngClickCopy']);
 app.controller('myCtrl', function($scope, $http) {
     var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
     $scope.account = {};
+    $scope.LoadingWord = "We are creating the wallet for you.";
 
     // Define the ShareTest information
-    $scope.sharewon = new StellarSdk.Asset("ShareTest", "GAILUMSBNA4NS64HHY7YWRATDDYPCKXXBWV56ZKDNDIHLBBU2FFFGUZL");
+    $scope.sharewon = new StellarSdk.Asset("ShareTest", "GCGL3JX5UBHPGZHYRBWKB7G4LKSCCCPD34DGLK7MG2EZPBYUJLBB3TZ2");
 
     // !---===Source Account need to keep it SAFE===---!
-    $scope.sourceAccount = StellarSdk.Keypair.fromSecret('SB42ERIDWT5MEFDNPH4YXMENCLCCTIYNXXSOTCTEZ3S4ELFW5GU7QT4D');
+    $scope.sourceAccount = StellarSdk.Keypair.fromSecret('SARVJADBG4ERVXAT3JDUGYFZYUIPFFEVAEPMK2DWAVYEOZN4TSEW5NED');
     
     // Bind the selected account with current account
     $scope.bind = function() {
@@ -95,19 +96,23 @@ app.controller('myCtrl', function($scope, $http) {
         console.log(transaction.toEnvelope().toXDR('base64'));
   
         try {
-            console.log("call airdrop try");
+            $scope.LoadingWord = "Sending ShareWon to you...";
+            $scope.$apply();
             const transactionResult = await server.submitTransaction(transaction);
             console.log(JSON.stringify(transactionResult, null, 2));
             console.log('\nSuccess! View the transaction at: ');
             console.log(transactionResult._links.transaction.href);
             console.log("airdropped!!");
             $scope.bind();
+            $scope.showLoading = false;
             $scope.showWalletbtn = true;
-            // $scope.$apply();
+            $scope.$apply();
+            return true;
         } catch (e) {
             console.log('An error has occured:');
             console.log(e);
             $scope.bind();
+            return e;
         }
         })
       }
@@ -153,10 +158,12 @@ app.controller('myCtrl', function($scope, $http) {
             // console.log(JSON.stringify(transactionResult, null, 2));
             console.log('\nSuccess! View the transaction at: ');
             console.log(transactionResult._links.transaction.href);
+            await $scope.airdrop(changeAccount.publicKey(), '100')
             return true;
           } catch (e) {
             console.log('An error has occured:');
             console.log(e);
+            return e;
           }
         })
       }
@@ -188,13 +195,9 @@ app.controller('myCtrl', function($scope, $http) {
             console.log("account created");
             console.log('New Keypair', createdAccount.publicKey(), createdAccount.secret());
             $scope.showWalletInfo = true;
-            $scope.showLoading = false;
-            $scope.$apply();
             localStorage.setItem("WalletAddress", createdAccount.publicKey());
             localStorage.setItem("WalletSecret", createdAccount.secret());
-            await Promise.all([$scope.changeTrust(createdAccount), $scope.airdrop(createdAccount.publicKey(), '100')]);
-            // await $scope.changeTrust(createdAccount);
-            // await $scope.airdrop(createdAccount.publicKey(), '100');
+            await $scope.changeTrust(createdAccount);
           })
       }
 

@@ -1,7 +1,7 @@
 <html>
     <header>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/4.1.0/stellar-sdk.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/5.0.0/stellar-sdk.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
         <script type="text/javascript" src="https://cdn.rawgit.com/JustMaier/6ef7788709d675bd8230/raw/3d39d50e66d8d77e05656ed7dd09298be7e86f1f/ngClickCopy.js"></script>
@@ -35,7 +35,8 @@
                           <div class="header">
                             Just one second
                           </div>
-                          <p>We are creating the wallet for you.</p>
+                          <p>{{LoadingWord}}</p>
+                          <!-- <p>We are creating the wallet for you.</p> -->
                         </div>
                     </div>
                 </div>
