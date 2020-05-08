@@ -20,5 +20,4 @@ Git all the files to your machine, use ``npm install`` to download all the requi
 3. ``check.html`` for checking any address's funds
 
 ## Demo
-You can also try the deom on:
-http://ec2-18-221-170-203.us-east-2.compute.amazonaws.com:3000/
+You can also try the demo on:
