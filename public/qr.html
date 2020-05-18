@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/5.0.0/stellar-sdk.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+  <script type="text/javascript"
+    src="https://cdn.rawgit.com/JustMaier/6ef7788709d675bd8230/raw/3d39d50e66d8d77e05656ed7dd09298be7e86f1f/ngClickCopy.js"></script>
+  <script type="text/javascript" src="./js/jsqrscanner.nocache.js"></script>
+  <script type="text/javascript" src="./js/script.js"></script>
+  <!-- <script type="text/javascript" src="./js/qrscript.js"></script> -->
+
+
+  <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+  <script src="semantic/semantic.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+  <div ng-app="myApp" ng-controller="myCtrl">
+    <h2>Check-in Record</h2>
+
+    <p id="Notice"></p>
+
+    <!-- <div id="QRModal" class="modal"> -->
+      <!-- <div class="modal-content" style="text-align: center;"> -->
+        <!-- <span class="close">&times;</span> -->
+        <div id="scanner" class="qrscanner" style="text-align: center;"></div>
+        <h3 id="qrword"></h3>
+        <!-- <textarea id="scannedTextMemo" readonly></textarea> -->
+      <!-- </div> -->
+    <!-- </div> -->
+
+    <!-- <button class="button" id="QRbutton" style="vertical-align:middle"><span>Scan QR Code</span></button> -->
+    <script type="text/javascript">
+
+      function onQRCodeScanned(scannedText) {
+        // scannedTextMemo.value = scannedText;
+
+        if (scannedText) {
+          console.log(scannedText);
+          document.getElementById("qrword").innerHTML = scannedText;
+        }
+      }
+
+      //this function will be called when JsQRScanner is ready to use
+      function JsQRScannerReady() {
+        //create a new scanner passing to it a callback function that will be invoked when
+        //the scanner succesfully scan a QR code
+        var jbScanner = new JsQRScanner(onQRCodeScanned);
+        //reduce the size of analyzed images to increase performance on mobile devices
+        jbScanner.setSnapImageMaxSize(300);
+        var scannerParentElement = document.getElementById("scanner");
+        if (scannerParentElement) {
+          //append the jbScanner to an existing DOM element
+          jbScanner.appendTo(scannerParentElement);
+        }
+      }
+    </script>
+  </div>
+
+</html>

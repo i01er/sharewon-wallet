@@ -1,0 +1,51 @@
+<html>
+<header>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/5.0.0/stellar-sdk.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+    <script type="text/javascript"
+        src="https://cdn.rawgit.com/JustMaier/6ef7788709d675bd8230/raw/3d39d50e66d8d77e05656ed7dd09298be7e86f1f/ngClickCopy.js"></script>
+
+    <!-- Include the Semantic CSS UI -->
+    <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="semantic/semantic.min.js"></script>
+    <script src="./js/history.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</header>
+
+<body>
+    <div ng-app="myApp" ng-controller="myCtrl">
+        <br>
+        <div class="ui container segments">
+            <div class="ui segment">
+                <h2 class="ui header">
+                    <img class="ui avatar huge image" src="./ShareWonLogo.png">
+                    <span>ShareWon Wallet Transaction History</span>
+                </h2>
+            </div>
+            <div class="ui segment">
+                <div>
+                    <table class="ui single line table">
+                        <tbody ng-repeat="i in history">
+                        <tr>
+                            <td><h3 class="left aligned"><img class="ui avatar nano image" src="./ShareWonLogo.png">&nbsp;{{i.type}}</h3></td>
+                            <td><p class="right aligned">{{i.amount}} {{i.assetCode}}</p></td>
+                            <!-- <td class="addr">{{i.destination}}</td> -->
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<footer>
+    <div class="ui vertical footer segment form-page">
+        <p style="text-align: center; color: grey;">Powered by Wealthskey</p>
+    </div>
+</footer>
+
+</html>

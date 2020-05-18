@@ -7,7 +7,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/',(req, res) =>
 {
-	res.sendFile(__dirname + '/public/wallet.html');
+    res.sendFile(__dirname + '/public/wallet.html');
 });
 
 app.listen(3000, () => {

@@ -7,5 +7,16 @@
 }
 
 p.addr {
-    word-break: break-all;
+  word-break: break-all;
+}
+
+.qrscanner video {
+  max-width: 95%;
+  max-height: 75%;
+}
+
+.addr {
+  word-break: break-all;
+  font-size: 4px;
+  color: gray;
 }

@@ -1,0 +1,53 @@
+<html>
+    <header>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/5.0.0/stellar-sdk.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://requirejs.org/docs/release/2.3.6/minified/require.js"></script>
+
+        <!-- Include the Semantic CSS UI -->
+        <link rel="stylesheet" type="text/css" href="semantic/semantic.min.css">
+        <script
+        src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+        crossorigin="anonymous"></script>
+        <script src="semantic/semantic.min.js"></script>
+        <script src="./js/restore.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </header>
+    <body>
+        <div ng-app="myApp" ng-controller="myCtrl">
+            <br>
+            <div class="ui container segments">
+                <div class="ui segment">
+                    <h2 class="ui header">
+                        <img class="ui avatar huge image" src="./ShareWonLogo.png">
+                        <span>ShareWon Wallet Restore</span>
+                    </h2>
+                </div>
+                <div class="ui segment">
+                    <h3 class="ui header">Account Secret: </h3>
+                    <div class="ui">
+                        <div class="ui fluid input"><input type="text" ng-change="restore()" ng-model="inputSecret" placeholder="Account Secret"/></div>
+                    </div>
+                    <br>
+                </div>
+                <div class="ui segment">
+                    <h3 class="ui header">Account Address: </h3>
+                    <p class="addr">{{inputAccount.publicKey()}}</h3>
+                    <br>
+                </div>
+                <div class="ui segment">
+                    <h3 class="ui header" style="text-align: center;"><span style="color: green;" ng-show="message">{{message}}</span><span ng-show="!message">Confirm to Restore?</span></h3>
+                    <button class="ui button black fluid" ng-click="confirm()" ng-show="!message">Restore</button>
+                    <button class="ui button black fluid" ng-click="gotoMyWallet()" ng-show="message">Goto My Wallet</button>
+                </div>
+            </div>
+        </div>
+    </body>
+    <footer>
+        <div class="ui vertical footer segment form-page">
+            <p style="text-align: center; color: grey;">Powered by Wealthskey</p>
+        </div>
+    </footer>
+</html>
