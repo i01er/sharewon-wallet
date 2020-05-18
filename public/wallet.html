@@ -51,7 +51,7 @@
                     return navigator.mediaDevices.getUserMedia({
                         video: {
                             'optional': [{
-                                'sourceId': ids.length === 1 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
+                                'sourceId': ids.length === 0 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
                             }]
                         }
                     });
@@ -62,7 +62,7 @@
         function JsQRScannerReady() {
             //create a new scanner passing to it a callback function that will be invoked when
             //the scanner succesfully scan a QR code
-            jbScanner = new JsQRScanner(onQRCodeScanned);
+            jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ);
             //reduce the size of analyzed images to increase performance on mobile devices
             jbScanner.setSnapImageMaxSize(300);
             var scannerParentElement = document.getElementById("scanner");
