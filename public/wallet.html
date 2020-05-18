@@ -62,7 +62,7 @@
         function JsQRScannerReady() {
             //create a new scanner passing to it a callback function that will be invoked when
             //the scanner succesfully scan a QR code
-            jbScanner = new JsQRScanner(onQRCodeScanned, provideVideoQQ);
+            jbScanner = new JsQRScanner(onQRCodeScanned);
             //reduce the size of analyzed images to increase performance on mobile devices
             jbScanner.setSnapImageMaxSize(300);
             var scannerParentElement = document.getElementById("scanner");
