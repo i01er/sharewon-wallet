@@ -21,3 +21,4 @@ Git all the files to your machine, use ``npm install`` to download all the requi
 
 ## Demo
 You can also try the demo on:
+[Demo Page](https://i01er.github.io/sharewon-wallet/public/wallet.html)
