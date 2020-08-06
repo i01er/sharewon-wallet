@@ -8,10 +8,10 @@ app.controller('myCtrl', function($scope, $http) {
     $scope.LoadingWord = "We are creating the wallet for you.";
 
     // Define the ShareTest information
-    $scope.sharewon = new StellarSdk.Asset("ShareTest", "GCGL3JX5UBHPGZHYRBWKB7G4LKSCCCPD34DGLK7MG2EZPBYUJLBB3TZ2");
+    $scope.sharewon = new StellarSdk.Asset("ShareTEST", "GBMMVGV4BDIY2X3SKKH6OF2IYRKVO2EK4WVJRO3ZMTGQCBBK3NVXJ4QT");
 
     // !---===Source Account need to keep it SAFE===---!
-    $scope.sourceAccount = StellarSdk.Keypair.fromSecret('SARVJADBG4ERVXAT3JDUGYFZYUIPFFEVAEPMK2DWAVYEOZN4TSEW5NED');
+    $scope.sourceAccount = StellarSdk.Keypair.fromSecret("SBHFOFRLXJHCPI646BWFD6XHA3ECN7E5VMWI3HNKHFBM5POIDW5MVPGE");
     
     // Bind the selected account with current account
     $scope.bind = function() {
