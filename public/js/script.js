@@ -14,7 +14,7 @@ app.controller('myCtrl', function ($scope, $http, $interval) {
   $scope.showSuccess = false;
 
   // Define the ShareTest information
-  $scope.sharewon = new StellarSdk.Asset("ShareTest", "GCGL3JX5UBHPGZHYRBWKB7G4LKSCCCPD34DGLK7MG2EZPBYUJLBB3TZ2");
+  $scope.sharewon = new StellarSdk.Asset("ShareTEST", "GBMMVGV4BDIY2X3SKKH6OF2IYRKVO2EK4WVJRO3ZMTGQCBBK3NVXJ4QT");
 
   var timer = $interval(function () {
     sessionStorage.removeItem("SendAddress");
@@ -229,7 +229,7 @@ app.controller('myCtrl', function ($scope, $http, $interval) {
 
   // Create new wallet account
   $scope.createAccount = function () {
-    var sourceAccount = StellarSdk.Keypair.fromSecret('SB42ERIDWT5MEFDNPH4YXMENCLCCTIYNXXSOTCTEZ3S4ELFW5GU7QT4D')
+    var sourceAccount = StellarSdk.Keypair.fromSecret("SBHFOFRLXJHCPI646BWFD6XHA3ECN7E5VMWI3HNKHFBM5POIDW5MVPGE")
     $scope.createdAccount = StellarSdk.Keypair.random()
 
     server.accounts()
